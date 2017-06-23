@@ -7,7 +7,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
-import io.reactivex.Observable;
+import rx.Observable;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
 
@@ -29,8 +29,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             matrixJob = null;
         }
     };
-    private boolean mIsBound;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         bindService(new Intent(this, JobService.class), connection, Context.BIND_AUTO_CREATE);
         mIsBound = true;
     }
+
+    private boolean mIsBound;
 
     @Override
     protected void onDestroy() {

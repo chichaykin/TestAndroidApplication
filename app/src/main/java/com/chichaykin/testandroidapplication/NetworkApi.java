@@ -10,6 +10,6 @@ import retrofit2.http.GET;
 
 public interface NetworkApi {
 
-    @GET("content_link/mWI4D5nSlu7aT6sSnLAVKPlCHS1V92gDIEadtu9ep07gsl7ZQluJ7Bg46JC98DHG/file")
+    @GET("/content_link/mWI4D5nSlu7aT6sSnLAVKPlCHS1V92gDIEadtu9ep07gsl7ZQluJ7Bg46JC98DHG/file")
     Observable<Data> getData();
 }

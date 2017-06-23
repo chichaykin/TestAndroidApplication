@@ -1,7 +1,5 @@
 package com.chichaykin.testandroidapplication;
 
-import io.reactivex.Observable;
-
 /**
  * Created by chichaykin on 23/06/2017.
  */
@@ -9,5 +7,5 @@ import io.reactivex.Observable;
 public interface MatrixJob {
     Result getData();
 
-    Observable<Result> calculateMatrix();
+    rx.Observable<Result> calculateMatrix();
 }

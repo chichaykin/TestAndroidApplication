@@ -9,7 +9,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
-import io.reactivex.Observable;
+import rx.Observable;
 
 public class JobService extends Service implements MatrixJob {
 
@@ -85,7 +85,10 @@ public class JobService extends Service implements MatrixJob {
 
     @Override
     public Observable<Result> calculateMatrix() {
-        return networkApi.getData();
+//        return networkApi.getData().switchMap(data -> {
+//            Matrix.
+//        });
+        return Observable.empty();
     }
 
     /**
