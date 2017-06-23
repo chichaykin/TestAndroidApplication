@@ -5,6 +5,7 @@ package com.chichaykin.testandroidapplication;
  */
 
 public interface MatrixJob {
+
     Result getData();
 
     rx.Observable<Result> calculateMatrix();

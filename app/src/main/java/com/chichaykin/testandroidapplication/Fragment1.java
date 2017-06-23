@@ -35,12 +35,9 @@ public class Fragment1 extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        view.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mListener != null) {
-                    mListener.onClick();
-                }
+        view.findViewById(R.id.button).setOnClickListener(v -> {
+            if (mListener != null) {
+                mListener.onClick();
             }
         });
     }

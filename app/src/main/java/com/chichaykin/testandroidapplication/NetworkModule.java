@@ -13,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NetworkModule {
     private static final String TAG = "NetworkModule";
-    private static final String URL = "https://dl.dropboxusercontent.com/content_link/mWI4D5nSlu7aT6sSnLAVKPlCHS1V92gDIEadtu9ep07gsl7ZQluJ7Bg46JC98DHG/file";
+    private static final String URL = "https://www.dropbox.com";
 
     NetworkApi provides() {
         OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();

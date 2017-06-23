@@ -9,14 +9,16 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
+import com.chichaykin.testandroidapplication.api.Data;
+import com.test.Matrix;
 import rx.Observable;
+import rx.functions.Func0;
 
 public class JobService extends Service implements MatrixJob {
 
     // This is the object that receives interactions from clients.  See
     // RemoteService for a more complete example.
     private final IBinder localBinder = new LocalBinder();
-    private IBinder bind;
     private NotificationManager notificationManager;
     // Unique Identification Number for the Notification.
     // We use it on Notification start, and to cancel it.
@@ -26,7 +28,7 @@ public class JobService extends Service implements MatrixJob {
 
     @Override
     public IBinder onBind(Intent intent) {
-        return bind;
+        return localBinder;
     }
 
     @Override
@@ -85,10 +87,22 @@ public class JobService extends Service implements MatrixJob {
 
     @Override
     public Observable<Result> calculateMatrix() {
-//        return networkApi.getData().switchMap(data -> {
-//            Matrix.
-//        });
-        return Observable.empty();
+        return networkApi.getData()
+                .flatMap(data -> getResult(data))
+                .doOnNext(result -> this.result = result); //cache result
+
+    }
+
+    private Observable<Result> getResult(Data data) {
+        return Observable.defer(() -> {
+            int rows = data.data.size();
+            int columns = rows != 0 ? data.data.get(0).size() : 0;
+            int[][] array = data.data.stream()
+                    .map(l -> l.stream().toArray(int[]::new))
+                    .toArray(int[][]::new);
+            int contries = Matrix.countries(array);
+            return Observable.just(new Result(rows, columns, 0));
+        });
     }
 
     /**
