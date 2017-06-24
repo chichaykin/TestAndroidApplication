@@ -1,4 +1,4 @@
-package com.chichaykin.testandroidapplication;
+package com.chichaykin.testandroidapplication.ui;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -8,6 +8,10 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import com.chichaykin.testandroidapplication.R;
+import com.chichaykin.testandroidapplication.model.Result;
+import com.chichaykin.testandroidapplication.service.JobService;
+import com.chichaykin.testandroidapplication.service.MatrixJob;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -19,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     private Fragment2 fragment2;
     private MatrixJob matrixJob;
     private Subscription subscription = Subscriptions.unsubscribed();
-    final ServiceConnection connection = new ServiceConnection() {
+    private final ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder binder) {
             if (binder instanceof JobService.LocalBinder) {

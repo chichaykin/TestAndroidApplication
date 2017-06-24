@@ -21,6 +21,7 @@ android {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
+    sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/assets/'] } }
 }
 
 dependencies {
@@ -40,9 +41,10 @@ dependencies {
     compile "com.squareup.retrofit2:adapter-rxjava:${RETROFIT_VER}"
     compile "com.squareup.okhttp3:okhttp:${OKHTTP_VER}"
     compile "com.squareup.okhttp3:logging-interceptor:${OKHTTP_VER}"
-    compile 'com.jakewharton.timber:timber:4.5.1'
     testCompile 'junit:junit:4.12'
-    compile files('/home/chichaykin/work/TestAndroidApplication/libs/MatrixLib.jar')
+    //compile files('libs/MatrixLib.jar')
+    //compile files('/Users/chichaykin/work/TestAndroidApplication/libs/MatrixLib.jar')
+    compile files('/Users/chichaykin/work/TestAndroidApplication/libs/MatrixLib.jar')
 }
 
 

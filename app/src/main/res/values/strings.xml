@@ -5,7 +5,8 @@
     <string name="local_service_started">Service started</string>
     <string name="local_service_stopped">Service stopped</string>
     <string name="local_service_label">the label of the entry</string>
-    <string name="matrix" formatted="false">Matrix size %dx%d</string>
+    <string name="matrix">Matrix size %1$dx%2$d</string>
     <string name="countries">Countries: %d</string>
     <string name="no_data">No data</string>
+    <string name="result">Result</string>
 </resources>

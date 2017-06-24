@@ -1,6 +1,4 @@
-package com.chichaykin.testandroidapplication;
-
-import android.net.Uri;
+package com.chichaykin.testandroidapplication.ui;
 
 /**
  * This interface must be implemented by activities that contain this
@@ -9,6 +7,6 @@ import android.net.Uri;
  * activity.
  * <p>
  */
-public interface OnFragmentInteractionListener {
+interface OnFragmentInteractionListener {
     void onClick();
 }

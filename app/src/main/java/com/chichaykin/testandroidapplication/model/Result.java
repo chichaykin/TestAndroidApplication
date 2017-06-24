@@ -1,13 +1,13 @@
-package com.chichaykin.testandroidapplication;
+package com.chichaykin.testandroidapplication.model;
 
 /**
- * Created by chichaykin on 23/06/2017.
+ * Calculation result
  */
 
 public class Result {
-    private int rows;
-    private int columns;
-    private int countries;
+    private final int rows;
+    private final int columns;
+    private final int countries;
 
     public Result(int rows, int columns, int countries) {
         this.rows = rows;

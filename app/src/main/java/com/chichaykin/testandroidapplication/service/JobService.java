@@ -1,4 +1,4 @@
-package com.chichaykin.testandroidapplication;
+package com.chichaykin.testandroidapplication.service;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -9,11 +9,26 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
+import com.chichaykin.testandroidapplication.CalculationProvider;
+import com.chichaykin.testandroidapplication.NetworkModule;
+import com.chichaykin.testandroidapplication.R;
 import com.chichaykin.testandroidapplication.api.Data;
-import com.test.Matrix;
+import com.chichaykin.testandroidapplication.api.NetworkApi;
+import com.chichaykin.testandroidapplication.model.Result;
+import com.chichaykin.testandroidapplication.ui.MainActivity;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import rx.Observable;
-import rx.functions.Func0;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+import static android.content.ContentValues.TAG;
+import static rx.Emitter.BackpressureMode.LATEST;
+
+/**
+ * Do calculation job and store calculated result in JobService.result field
+ */
 public class JobService extends Service implements MatrixJob {
 
     // This is the object that receives interactions from clients.  See
@@ -22,9 +37,10 @@ public class JobService extends Service implements MatrixJob {
     private NotificationManager notificationManager;
     // Unique Identification Number for the Notification.
     // We use it on Notification start, and to cancel it.
-    private int NOTIFICATION = R.string.local_service_started;
+    private final int NOTIFICATION = R.string.local_service_started;
     private Result result;
     private NetworkApi networkApi;
+    private CalculationProvider calcProvider;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -37,7 +53,10 @@ public class JobService extends Service implements MatrixJob {
 
         // Display a notification about us starting.  We put an icon in the status bar.
         showNotification();
+
+        //TODO: move instantiating to DI
         networkApi = new NetworkModule().provides();
+        calcProvider = new CalculationProvider();
     }
 
     @Override
@@ -87,23 +106,49 @@ public class JobService extends Service implements MatrixJob {
 
     @Override
     public Observable<Result> calculateMatrix() {
-        return networkApi.getData()
-                .flatMap(data -> getResult(data))
+        Observable<Result> observable;
+        if (true) {
+            // Note! Load data from asset to avoid parsing html
+            // to download file from dropbox.
+            observable = readDataFromAssetsAndCalculate();
+        } else {
+            observable = networkApi.getData()
+                    .flatMap(this::getResult);
+        }
+        return observable
                 .doOnNext(result -> this.result = result); //cache result
+    }
 
+    private Observable<Result> readDataFromAssetsAndCalculate() {
+        return Observable.create(resultEmitter -> {
+            Log.d(TAG, "start downloading file...");
+            InputStreamReader reader = null;
+            try  {
+                reader = new InputStreamReader(getAssets().open("mapdata.json"));
+                Gson gson = new GsonBuilder().create();
+                Data data = gson.fromJson(reader, Data.class);
+
+                resultEmitter.onNext(calcProvider.calculate(data));
+                resultEmitter.onCompleted();
+            } catch (Exception e) {
+                e.printStackTrace();
+                resultEmitter.onError(e);
+            } finally {
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, LATEST);
     }
 
     private Observable<Result> getResult(Data data) {
-        return Observable.defer(() -> {
-            int rows = data.data.size();
-            int columns = rows != 0 ? data.data.get(0).size() : 0;
-            int[][] array = data.data.stream()
-                    .map(l -> l.stream().toArray(int[]::new))
-                    .toArray(int[][]::new);
-            int contries = Matrix.countries(array);
-            return Observable.just(new Result(rows, columns, 0));
-        });
+        return Observable.fromCallable(() -> calcProvider.calculate(data));
     }
+
 
     /**
      * Class for clients to access.  Because we know this service always
@@ -111,7 +156,7 @@ public class JobService extends Service implements MatrixJob {
      * IPC.
      */
     public class LocalBinder extends Binder {
-        MatrixJob getService() {
+        public MatrixJob getService() {
             return JobService.this;
         }
     }

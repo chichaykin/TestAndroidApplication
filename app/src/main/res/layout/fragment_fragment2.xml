@@ -1,13 +1,21 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.chichaykin.testandroidapplication.Fragment2"
-             android:layout_gravity="center">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:gravity="center"
+              tools:context="com.chichaykin.testandroidapplication.ui.Fragment2"
+              android:orientation="vertical">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textAppearance="@android:style/TextAppearance.Large"
+            android:textStyle="bold"
+            android:text="@string/result"/>
 
     <LinearLayout
             android:id="@+id/result_view"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -31,11 +39,9 @@
             android:id="@+id/no_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="50dp"
             android:textAppearance="@android:style/TextAppearance.Large"
             android:text="@string/no_data"
             android:layout_gravity="center_horizontal"
-            android:visibility="gone"
     />
 
-</FrameLayout>
+</LinearLayout>
